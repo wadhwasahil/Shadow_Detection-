@@ -5,7 +5,7 @@ def default_conv(input, num_filters):
     b = tf.Variable(tf.constant(0.0, shape=[num_filters]), name="b")
     conv = tf.nn.bias_add(tf.layers.conv2d(input, filters=num_filters, kernel_size=(5, 5),
                                            kernel_initializer=tf.truncated_normal_initializer(stddev=0.2),
-                                           strides=(2, 2), padding="VALID"), b, name="conv")
+                                           strides=(2, 2), padding="same"), b, name="conv")
     return conv
 
 
