@@ -51,6 +51,7 @@ class Generator(object):
             conv8 = default_conv(r8, 512)
             batch_norm7 = tf.layers.batch_normalization(conv8, training=True)
 
+        # todo - axis of concatenation = 0?
         with tf.name_scope("deconv_DR512_1"):
             r9 = tf.nn.relu(batch_norm7, name="relu")
             deconv1 = tf.layers.conv2d_transpose(r9, 512, kernel_size=(5,5), strides=(2,2), padding="same")
@@ -76,6 +77,28 @@ class Generator(object):
             r12 = tf.nn.relu(concat3, name="relu")
             deconv4 = tf.layers.conv2d_transpose(r12, 512, kernel_size=(5, 5), strides=(2, 2), padding="same")
             batch_norm11 = tf.layers.batch_normalization(deconv4, training=True)
-            concat3 = tf.concat([dropout3, batch_norm11], axis=0)
+            concat3 = tf.concat([batch_norm3, batch_norm11], axis=0)
 
+        with tf.name_scope("deconv_R256"):
+            r13 = tf.nn.relu(concat3, name="relu")
+            deconv5 = tf.layers.conv2d_transpose(r13, 256, kernel_size=(5, 5), strides=(2, 2), padding="same")
+            batch_norm12 = tf.layers.batch_normalization(deconv5, training=True)
+            concat4 = tf.concat([batch_norm2, batch_norm12], axis=0)
+
+        with tf.name_scope("deconv_R128"):
+            r14 = tf.nn.relu(concat4, name="relu")
+            deconv6 = tf.layers.conv2d_transpose(r14, 128, kernel_size=(5, 5), strides=(2, 2), padding="same")
+            batch_norm13 = tf.layers.batch_normalization(deconv6, training=True)
+            concat5 = tf.concat([batch_norm1, batch_norm13], axis=0)
+
+        with tf.name_scope("deconv_R64"):
+            r14 = tf.nn.relu(concat5, name="relu")
+            deconv7 = tf.layers.conv2d_transpose(r14, 64, kernel_size=(5, 5), strides=(2, 2), padding="same")
+            batch_norm14 = tf.layers.batch_normalization(deconv7, training=True)
+            concat4 = tf.concat([conv1, batch_norm14], axis=0)
+
+        with tf.name_scope("deconv_1"):
+            r15 = tf.nn.relu(concat4, name="relu")
+            deconv8 = tf.layers.conv2d_transpose(r13, 1, kernel_size=(5, 5), strides=(2, 2), padding="same")
+            tanh1 = tf.nn.tanh(deconv8, name="tanh")
 
