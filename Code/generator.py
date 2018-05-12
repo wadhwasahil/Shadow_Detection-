@@ -10,7 +10,7 @@ def default_conv(input, num_filters):
 
 
 class Generator(object):
-    def __init__(self, w=0.1):
+    def __init__(self):
         self.X = tf.placeholder(tf.float32, [None, 256, 256, 3], name="X_train")
 
         with tf.name_scope("conv64"):
@@ -99,6 +99,6 @@ class Generator(object):
 
         with tf.name_scope("deconv_1"):
             r15 = tf.nn.relu(concat4, name="relu")
-            deconv8 = tf.layers.conv2d_transpose(r13, 1, kernel_size=(5, 5), strides=(2, 2), padding="same")
-            tanh1 = tf.nn.tanh(deconv8, name="tanh")
+            deconv8 = tf.layers.conv2d_transpose(r15, 1, kernel_size=(5, 5), strides=(2, 2), padding="same")
+            self.tanh1 = tf.nn.tanh(deconv8, name="tanh")
 
