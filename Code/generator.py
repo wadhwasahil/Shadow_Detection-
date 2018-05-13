@@ -100,5 +100,5 @@ class Generator(object):
         with tf.name_scope("deconv_1"):
             r15 = tf.nn.relu(concat4, name="relu")
             deconv8 = tf.layers.conv2d_transpose(r15, 1, kernel_size=(5, 5), strides=(2, 2), padding="same")
-            self.tanh1 = tf.nn.tanh(deconv8, name="tanh")
+            self.tanh = tf.nn.tanh(deconv8, name="tanh")
 

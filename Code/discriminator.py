@@ -10,9 +10,9 @@ def default_conv(input, num_filters):
 class Discriminator(object):
     def __init__(self):
         self.rgb_image = tf.placeholder(tf.float32, [None, 256, 256, 3], name="rg_image")
-        self.shadow_mask = tf.placeholder(tf.float32, [None, 256, 256, 1], name="shadow_mask")
-
-        self.stack = tf.concat([self.rgb_image, self.shadow_mask], axis=3)
+        self.shadow_mask = tf.placeholder(tf.float32, [None, 256, 256], name="shadow_mask")
+        self.shadow_mask_expanded = tf.expand_dims(self.shadow_mask, axis=-1, name="shadow_mask_expanded")
+        self.stack = tf.concat([self.rgb_image, self.shadow_mask_expanded], axis=3)
 
         with tf.name_scope("conv_R64"):
             conv1 = default_conv(self.stack, 64)
@@ -40,3 +40,5 @@ class Discriminator(object):
             b = tf.get_variable('biases', shape=[1], initializer=tf.constant_initializer(0.0))
             self.sigmoid = tf.nn.sigmoid(tf.matmul(reshape, W) + b, name="sigmoid")
 
+
+Discriminator()
