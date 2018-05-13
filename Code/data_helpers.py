@@ -1,6 +1,8 @@
 import cv2
 import os
 import tensorflow as tf
+import numpy as np
+
 
 def resize(img, h=256, w=256):
     return cv2.resize(img, (h, w))
@@ -30,12 +32,21 @@ def batch_iter(doc, batch_size, num_epochs, shuffle=True):
             yield shuffled_data[start_index:end_index]
 
 def generate_patches(image):
+    sess = tf.InteractiveSession()
     data = []
     data.append(resize(image))
     print(image.shape)
     res = cv2.resize(image, None, fx=0.75, fy=0.75)
+    image_resized = np.array([image]) # 1 * h * w * 3
+    patches_256 = tf.extract_image_patches(image_resized, ksizes=[1, 256, 256, 1],
+                                           strides=[1, 20, 20, 1], rates=[1, 1, 1, 1], padding="VALID")
+    patches_256 = tf.reshape(patches_256, [-1, 256 * 256 * 3])
+    print(patches_256)
+    patch1 = patches_256[0, ]
+    patch1 = tf.reshape(patch1, [256, 256, 3])
+    cv2.imshow('patch1', patch1.eval())
     cv2.waitKey(0)
-
+    cv2.destroyAllWindows()
 
 
 def read_data(data_path="../Data/SBU-shadow", train=True):
@@ -50,7 +61,7 @@ def read_data(data_path="../Data/SBU-shadow", train=True):
                 abs_path_image = path + "/ShadowImages/" + file
                 abs_path_shadow = path + "/ShadowMasks/" + file
                 abs_path_shadow = abs_path_shadow.split(".jpg")[0] + ".png"
-                # img_data =  generate_patches(cv2.imread(abs_path_image))
+                img_data =  generate_patches(cv2.imread(abs_path_image))
                 shadow = resize(cv2.imread(abs_path_shadow, cv2.IMREAD_GRAYSCALE))
             except Exception as e:
                 print(file, "couldn't open properly")
