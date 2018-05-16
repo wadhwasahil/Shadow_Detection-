@@ -41,4 +41,3 @@ class Discriminator(object):
             self.sigmoid = tf.nn.sigmoid(tf.matmul(reshape, W) + b, name="sigmoid")
 
 
-Discriminator()
