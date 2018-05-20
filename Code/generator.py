@@ -109,4 +109,4 @@ class Generator(object):
             with tf.name_scope("deconv_1"):
                 r15 = tf.nn.relu(concat4, name="relu")
                 deconv8 = default_deconv(r15, 1)
-                self.tanh = tf.squeeze(tf.nn.tanh(deconv8, name="tanh"))
+                self.tanh = tf.squeeze(tf.nn.sigmoid(deconv8, name="tanh"))

@@ -81,7 +81,7 @@ def read_data(data_path="../Data/SBU-shadow", epochs=1, batch_size=16, train=Tru
                         cnt += 1
                         # img = read_image(abs_image_path)
                         # generate_patches(img, f)
-                        arr.append((read_image(abs_image_path) / 255., read_image(abs_shadow_path, False) / 255.))
+                        arr.append((read_image(abs_image_path) / 255, read_image(abs_shadow_path, False) / 255.))
                     except Exception as e:
                         traceback.print_exc()
                 yield arr
