@@ -52,9 +52,14 @@ with tf.Graph().as_default():
             g_train_step = tf.train.AdamOptimizer().minimize(g_loss, var_list=gvar, global_step=global_step)
         init = tf.global_variables_initializer()
         sess.run(init)
-        # out_dir = os.path.abspath(os.path.join(os.path.curdir, "pizza/"))
+        out_dir = os.path.abspath(os.path.join("../", "Models"))
+        checkpoint_dir = os.path.abspath(os.path.join(out_dir, "checkpoints"))
+        checkpoint_prefix = os.path.join(checkpoint_dir, "model")
+        if not os.path.exists(checkpoint_dir):
+            os.makedirs(checkpoint_dir)
         # merged_summary = tf.summary.merge_all()
         timestamp = str(int(time.time()))
+        saver = tf.train.Saver(tf.all_variables())
         # writer = tf.summary.FileWriter(out_dir + timestamp)
         # writer.add_graph(sess.graph)
 
@@ -67,5 +72,8 @@ with tf.Graph().as_default():
                 feed_dict={X: x, ground_truth_shadow_masks: y})
             _, g_loss_value = sess.run([g_train_step, g_loss], feed_dict={X:x, ground_truth_shadow_masks:y})
             _, g_loss_value = sess.run([g_train_step, g_loss], feed_dict={X: x, ground_truth_shadow_masks: y})
-            print(step, d_loss_val, g_loss_value)
+            if i % 2 == 0:
+                path = saver.save(sess, checkpoint_prefix, global_step=step)
+                print("Saved model checkpoint to {}\n".format(path))
+            print(i, d_loss_val, g_loss_value)
 
