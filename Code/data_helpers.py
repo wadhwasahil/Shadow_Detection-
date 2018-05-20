@@ -51,10 +51,10 @@ def generate_patches(image, file_name, data_path="../Data/SBU-shadow/Train/Shado
 def read_image(path, is_color=True):
     if not is_color:
         return resize(cv2.imread(path, cv2.IMREAD_GRAYSCALE))
-    return cv2.imread(path)
+    return resize(cv2.imread(path))
 
 
-def read_data(data_path="../Data/SBU-shadow", epochs=1, batch_size=1, train=True):
+def read_data(data_path="../Data/SBU-shadow", epochs=1, batch_size=16, train=True):
     if train:
         path = os.path.join(data_path, "Train")
     else:
@@ -76,18 +76,15 @@ def read_data(data_path="../Data/SBU-shadow", epochs=1, batch_size=1, train=True
                 arr = []
                 for f in shuffle_files[start_index:end_index]:
                     try:
-                        # todo - add patches per image
-                        print(f)
                         abs_image_path = path + "/ShadowImages/" + f
                         abs_shadow_path = path + "/ShadowMasks/" + f.split(".jpg")[0] + ".png"
                         cnt += 1
-                        img = read_image(abs_image_path)
-                        print(cnt)
-                        generate_patches(img, f)
-                        # arr.append((read_image(abs_image_path) / 255., read_image(abs_shadow_path, False) / 255.))
+                        # img = read_image(abs_image_path)
+                        # generate_patches(img, f)
+                        arr.append((read_image(abs_image_path) / 255., read_image(abs_shadow_path, False) / 255.))
                     except Exception as e:
                         traceback.print_exc()
-                # yield arr
+                yield arr
 
 
 
@@ -96,6 +93,3 @@ def read_data(data_path="../Data/SBU-shadow", epochs=1, batch_size=1, train=True
 
 # for i in read_data():
 #     print(i)
-
-
-read_data()
