@@ -106,6 +106,7 @@ class Generator(object):
                 batch_norm14 = tf.layers.batch_normalization(deconv7, training=True)
                 concat4 = tf.concat([conv1, batch_norm14], axis=-1)
 
+            # todo - tanh giving nan values
             with tf.name_scope("deconv_1"):
                 r15 = tf.nn.relu(concat4, name="relu")
                 deconv8 = default_deconv(r15, 1)
