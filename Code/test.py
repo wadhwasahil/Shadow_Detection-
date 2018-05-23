@@ -53,7 +53,7 @@ with graph.as_default():
 
         for i, batch in enumerate(read_data(train=False)):
             s1, s2, s3, shadow = np.array([batch[0]]), np.array(batch[1]), np.array(batch[2]), np.array(batch[3])
-            print(s1.shape, s2.shape, s3.shape, shadow.shape)
+            print(s1.shape, s2.shape, s3.shape, shadow)
             orig_w, orig_h = shadow.shape
             denominator = 25 + 5 * s2.shape[0] + s3.shape[0]
             s1_shadow_map = np.array(sess.run(g_tanh, feed_dict={X: s1}))
@@ -71,6 +71,10 @@ with graph.as_default():
                 weighted_matrx = weighted_matrx + s3_shadow_map_resized[k]
             shadow_predicted = weighted_matrx / denominator
             # update_confusion_matrix(y, np.array(predicted_shadow_map))
+
+            cv2.imshow("predicted shadow", shadow_predicted)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
             break
 
         # print(BER())

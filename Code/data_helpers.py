@@ -121,7 +121,7 @@ def read_data(data_path="../Data/SBU-shadow", epochs=1, batch_size=16, train=Tru
             try:
                 abs_image_path = path + "/ShadowImages/" + files[batch_num]
                 abs_shadow_path = path + "/ShadowMasks/" + files[batch_num].split(".jpg")[0] + ".png"
-
+                print("Opening ", abs_image_path, "." * 10)
                 img = cv2.imread(abs_image_path)
                 shadow = (cv2.threshold(cv2.imread(abs_shadow_path, cv2.IMREAD_GRAYSCALE), 128, 255,
                                     cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]) / 255.
