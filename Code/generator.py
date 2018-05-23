@@ -17,13 +17,11 @@ def default_deconv(input, num_filters):
 
 
 class Generator(object):
-    def __init__(self, X, w=0.7, batch_size=16):
+    def __init__(self, X):
         with tf.variable_scope("generator"):
-            sensitivity = tf.constant(w, shape=[batch_size, 256, 256, 1])
 
-            X_expanded = tf.concat([X, sensitivity], axis=-1, name="X_expanded")
             with tf.name_scope("conv64"):
-                conv1 = default_conv(X_expanded, 64)
+                conv1 = default_conv(X, 64)
 
             with tf.name_scope("conv_RB128"):
                 r1 = tf.nn.leaky_relu(conv1, name="leaky_relu")
